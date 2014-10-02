@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B900A03919D44973002A8A28 /* EQViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B900A03819D44973002A8A28 /* EQViewController.m */; };
+		B900A03B19D452CD002A8A28 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B900A03A19D452CD002A8A28 /* Media.xcassets */; };
+		B900A03D19D45569002A8A28 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B900A03C19D45569002A8A28 /* QuartzCore.framework */; };
+		B900A04019D47643002A8A28 /* EQView.m in Sources */ = {isa = PBXBuildFile; fileRef = B900A03F19D47643002A8A28 /* EQView.m */; };
+		B900A04319D481AA002A8A28 /* vDSPTest.m in Sources */ = {isa = PBXBuildFile; fileRef = B900A04219D481AA002A8A28 /* vDSPTest.m */; };
+		B9B47C0619D98C3E0052AEB6 /* SourceSansPro-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = B9B47C0519D98C3E0052AEB6 /* SourceSansPro-ExtraLight.otf */; };
+		B9B47C0D19D9BBFF0052AEB6 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = B9B47C0C19D9BBFF0052AEB6 /* Utils.m */; };
+		B9D241F919DAE3BC00FC01F2 /* apfelsinen.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B9D241F819DAE3BC00FC01F2 /* apfelsinen.m4a */; };
+		B9D241FC19DB004200FC01F2 /* JVPeakingEQ.m in Sources */ = {isa = PBXBuildFile; fileRef = B9D241FB19DB004200FC01F2 /* JVPeakingEQ.m */; };
 		B9D4FED819D428260045A380 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9D4FED719D428260045A380 /* Foundation.framework */; };
 		B9D4FEDA19D428260045A380 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9D4FED919D428260045A380 /* CoreGraphics.framework */; };
 		B9D4FEDC19D428260045A380 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9D4FEDB19D428260045A380 /* UIKit.framework */; };
@@ -14,13 +23,13 @@
 		B9D4FEE419D428260045A380 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B9D4FEE319D428260045A380 /* main.m */; };
 		B9D4FEE819D428260045A380 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B9D4FEE719D428260045A380 /* AppDelegate.m */; };
 		B9D4FEEB19D428260045A380 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9D4FEE919D428260045A380 /* Main.storyboard */; };
-		B9D4FEEE19D428260045A380 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B9D4FEED19D428260045A380 /* ViewController.m */; };
 		B9D4FEF019D428260045A380 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9D4FEEF19D428260045A380 /* Images.xcassets */; };
 		B9D4FEF719D428260045A380 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9D4FEF619D428260045A380 /* XCTest.framework */; };
 		B9D4FEF819D428260045A380 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9D4FED719D428260045A380 /* Foundation.framework */; };
 		B9D4FEF919D428260045A380 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9D4FEDB19D428260045A380 /* UIKit.framework */; };
 		B9D4FF0119D428260045A380 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B9D4FEFF19D428260045A380 /* InfoPlist.strings */; };
 		B9D4FF0319D428260045A380 /* ParametricEQTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B9D4FF0219D428260045A380 /* ParametricEQTests.m */; };
+		F4C093713C93472B99EC5216 /* libPods-ParametricEQ.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D9A8DB935DD543D0AFDA1F08 /* libPods-ParametricEQ.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +43,21 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B900A03719D44973002A8A28 /* EQViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EQViewController.h; sourceTree = "<group>"; };
+		B900A03819D44973002A8A28 /* EQViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EQViewController.m; sourceTree = "<group>"; };
+		B900A03A19D452CD002A8A28 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
+		B900A03C19D45569002A8A28 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		B900A03E19D47643002A8A28 /* EQView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EQView.h; sourceTree = "<group>"; };
+		B900A03F19D47643002A8A28 /* EQView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EQView.m; sourceTree = "<group>"; };
+		B900A04119D481AA002A8A28 /* vDSPTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vDSPTest.h; sourceTree = "<group>"; };
+		B900A04219D481AA002A8A28 /* vDSPTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = vDSPTest.m; sourceTree = "<group>"; };
+		B9B47C0519D98C3E0052AEB6 /* SourceSansPro-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSansPro-ExtraLight.otf"; sourceTree = "<group>"; };
+		B9B47C0719D9A5180052AEB6 /* constant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = constant.h; sourceTree = "<group>"; };
+		B9B47C0B19D9BBFF0052AEB6 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
+		B9B47C0C19D9BBFF0052AEB6 /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
+		B9D241F819DAE3BC00FC01F2 /* apfelsinen.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = apfelsinen.m4a; sourceTree = "<group>"; };
+		B9D241FA19DB004200FC01F2 /* JVPeakingEQ.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVPeakingEQ.h; sourceTree = "<group>"; };
+		B9D241FB19DB004200FC01F2 /* JVPeakingEQ.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JVPeakingEQ.m; sourceTree = "<group>"; };
 		B9D4FED419D428260045A380 /* ParametricEQ.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ParametricEQ.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9D4FED719D428260045A380 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		B9D4FED919D428260045A380 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -45,14 +69,14 @@
 		B9D4FEE619D428260045A380 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		B9D4FEE719D428260045A380 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		B9D4FEEA19D428260045A380 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		B9D4FEEC19D428260045A380 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		B9D4FEED19D428260045A380 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		B9D4FEEF19D428260045A380 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		B9D4FEF519D428260045A380 /* ParametricEQTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ParametricEQTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9D4FEF619D428260045A380 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		B9D4FEFE19D428260045A380 /* ParametricEQTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ParametricEQTests-Info.plist"; sourceTree = "<group>"; };
 		B9D4FF0019D428260045A380 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		B9D4FF0219D428260045A380 /* ParametricEQTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ParametricEQTests.m; sourceTree = "<group>"; };
+		D9A8DB935DD543D0AFDA1F08 /* libPods-ParametricEQ.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ParametricEQ.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EA36A13DBBC94DD88A6BAC57 /* Pods-ParametricEQ.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParametricEQ.xcconfig"; path = "Pods/Pods-ParametricEQ.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,9 +84,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B900A03D19D45569002A8A28 /* QuartzCore.framework in Frameworks */,
 				B9D4FEDA19D428260045A380 /* CoreGraphics.framework in Frameworks */,
 				B9D4FEDC19D428260045A380 /* UIKit.framework in Frameworks */,
 				B9D4FED819D428260045A380 /* Foundation.framework in Frameworks */,
+				F4C093713C93472B99EC5216 /* libPods-ParametricEQ.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,6 +105,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B9B47C0A19D9BBED0052AEB6 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				B9B47C0B19D9BBFF0052AEB6 /* Utils.h */,
+				B9B47C0C19D9BBFF0052AEB6 /* Utils.m */,
+			);
+			name = Utils;
+			sourceTree = "<group>";
+		};
 		B9D4FECB19D428260045A380 = {
 			isa = PBXGroup;
 			children = (
@@ -86,6 +121,7 @@
 				B9D4FEFC19D428260045A380 /* ParametricEQTests */,
 				B9D4FED619D428260045A380 /* Frameworks */,
 				B9D4FED519D428260045A380 /* Products */,
+				EA36A13DBBC94DD88A6BAC57 /* Pods-ParametricEQ.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -101,10 +137,12 @@
 		B9D4FED619D428260045A380 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B900A03C19D45569002A8A28 /* QuartzCore.framework */,
 				B9D4FED719D428260045A380 /* Foundation.framework */,
 				B9D4FED919D428260045A380 /* CoreGraphics.framework */,
 				B9D4FEDB19D428260045A380 /* UIKit.framework */,
 				B9D4FEF619D428260045A380 /* XCTest.framework */,
+				D9A8DB935DD543D0AFDA1F08 /* libPods-ParametricEQ.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -112,12 +150,21 @@
 		B9D4FEDD19D428260045A380 /* ParametricEQ */ = {
 			isa = PBXGroup;
 			children = (
+				B9B47C0A19D9BBED0052AEB6 /* Utils */,
+				B9B47C0719D9A5180052AEB6 /* constant.h */,
 				B9D4FEE619D428260045A380 /* AppDelegate.h */,
 				B9D4FEE719D428260045A380 /* AppDelegate.m */,
 				B9D4FEE919D428260045A380 /* Main.storyboard */,
-				B9D4FEEC19D428260045A380 /* ViewController.h */,
-				B9D4FEED19D428260045A380 /* ViewController.m */,
+				B9D241FA19DB004200FC01F2 /* JVPeakingEQ.h */,
+				B9D241FB19DB004200FC01F2 /* JVPeakingEQ.m */,
+				B900A04119D481AA002A8A28 /* vDSPTest.h */,
+				B900A04219D481AA002A8A28 /* vDSPTest.m */,
+				B900A03719D44973002A8A28 /* EQViewController.h */,
+				B900A03819D44973002A8A28 /* EQViewController.m */,
+				B900A03E19D47643002A8A28 /* EQView.h */,
+				B900A03F19D47643002A8A28 /* EQView.m */,
 				B9D4FEEF19D428260045A380 /* Images.xcassets */,
+				B900A03A19D452CD002A8A28 /* Media.xcassets */,
 				B9D4FEDE19D428260045A380 /* Supporting Files */,
 			);
 			path = ParametricEQ;
@@ -126,6 +173,8 @@
 		B9D4FEDE19D428260045A380 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				B9D241F819DAE3BC00FC01F2 /* apfelsinen.m4a */,
+				B9B47C0519D98C3E0052AEB6 /* SourceSansPro-ExtraLight.otf */,
 				B9D4FEDF19D428260045A380 /* ParametricEQ-Info.plist */,
 				B9D4FEE019D428260045A380 /* InfoPlist.strings */,
 				B9D4FEE319D428260045A380 /* main.m */,
@@ -159,9 +208,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B9D4FF0619D428260045A380 /* Build configuration list for PBXNativeTarget "ParametricEQ" */;
 			buildPhases = (
+				A21129CCAAAB4588AA1152B1 /* Check Pods Manifest.lock */,
 				B9D4FED019D428260045A380 /* Sources */,
 				B9D4FED119D428260045A380 /* Frameworks */,
 				B9D4FED219D428260045A380 /* Resources */,
+				6F59E86E0C0044C0A6FF1A17 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -228,8 +279,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B9B47C0619D98C3E0052AEB6 /* SourceSansPro-ExtraLight.otf in Resources */,
 				B9D4FEF019D428260045A380 /* Images.xcassets in Resources */,
 				B9D4FEE219D428260045A380 /* InfoPlist.strings in Resources */,
+				B9D241F919DAE3BC00FC01F2 /* apfelsinen.m4a in Resources */,
+				B900A03B19D452CD002A8A28 /* Media.xcassets in Resources */,
 				B9D4FEEB19D428260045A380 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -244,13 +298,50 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		6F59E86E0C0044C0A6FF1A17 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Pods-ParametricEQ-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A21129CCAAAB4588AA1152B1 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		B9D4FED019D428260045A380 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B9D4FEEE19D428260045A380 /* ViewController.m in Sources */,
+				B900A04319D481AA002A8A28 /* vDSPTest.m in Sources */,
+				B900A04019D47643002A8A28 /* EQView.m in Sources */,
+				B9D241FC19DB004200FC01F2 /* JVPeakingEQ.m in Sources */,
 				B9D4FEE819D428260045A380 /* AppDelegate.m in Sources */,
+				B9B47C0D19D9BBFF0052AEB6 /* Utils.m in Sources */,
+				B900A03919D44973002A8A28 /* EQViewController.m in Sources */,
 				B9D4FEE419D428260045A380 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -373,9 +464,11 @@
 		};
 		B9D4FF0719D428260045A380 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EA36A13DBBC94DD88A6BAC57 /* Pods-ParametricEQ.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ParametricEQ/ParametricEQ-Prefix.pch";
 				INFOPLIST_FILE = "ParametricEQ/ParametricEQ-Info.plist";
@@ -386,9 +479,11 @@
 		};
 		B9D4FF0819D428260045A380 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EA36A13DBBC94DD88A6BAC57 /* Pods-ParametricEQ.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ParametricEQ/ParametricEQ-Prefix.pch";
 				INFOPLIST_FILE = "ParametricEQ/ParametricEQ-Info.plist";
@@ -456,6 +551,7 @@
 				B9D4FF0819D428260045A380 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		B9D4FF0919D428260045A380 /* Build configuration list for PBXNativeTarget "ParametricEQTests" */ = {
 			isa = XCConfigurationList;
@@ -464,6 +560,7 @@
 				B9D4FF0B19D428260045A380 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
