@@ -15,7 +15,6 @@
 @property (strong, nonatomic) NSMutableArray *points;
 @property (assign, nonatomic) CGFloat normLineY;
 
+@property (strong, nonatomic) NSMutableArray *labels;
 
--(id)initWithFrame:(CGRect)frame andCenterFrequency:(float)freq andGain:(float)gain andQ:(float)qfactor;
--(void) adjustGraph;
 @end

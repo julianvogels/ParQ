@@ -13,6 +13,7 @@
 @protocol JVPeakingEQDelegate <NSObject>
 
 @optional
+- (void) updateLevelMeter:(float)level;
 - (void) filterCoefficients:(float [5])coeffs;
 @end
 

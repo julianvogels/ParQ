@@ -14,16 +14,6 @@
 
 @implementation EQView
 
-- (id)initWithFrame:(CGRect)frame andCenterFrequency:(float)freq andGain:(float)gain andQ:(float)qfactor
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-        
-        
-    }
-    return self;
-}
-
 - (id) initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
@@ -31,10 +21,6 @@
         
     }
     return self;
-    
-}
-
--(void)adjustGraph{
     
 }
 
@@ -46,6 +32,7 @@
     
     [self drawBackgroundInRect:rect inContext:context withColorSpace:colorSpace];
     [self drawFilterCurveInRect:rect inContext:context withColorSpace:colorSpace];
+    
     
     
     CGColorSpaceRelease(colorSpace);
@@ -76,6 +63,16 @@
 
 -(void) drawFilterCurveInRect: (CGRect)rect inContext: (CGContextRef)context withColorSpace: (CGColorSpaceRef)colorSpace
 {
+    
+    // Remove UILabels id any
+    for (UIView *subView in self.subviews)
+    {
+        if ([subView isKindOfClass:[UILabel class]])
+        {
+            [subView removeFromSuperview];
+        }
+    }
+    
     
     CGContextSaveGState(context);
     
@@ -113,14 +110,8 @@
     [normLine moveToPoint:CGPointMake(-5.0f, _normLineY)];
     [normLine addLineToPoint:CGPointMake(rect.size.width+5.0f, _normLineY)];
     
-    // Set the render colors.
-    [[UIColor colorWithRed:111.0/255.0 green:0.0 blue:1.0 alpha:0.2] setStroke];
-    
-    // Adjust the drawing options as needed.
-    normLine.lineWidth = 1.0f;
-    
-    // Fill the path before stroking it so that the fill
-    // color does not obscure the stroked line.
+    [[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.2] setStroke];
+    normLine.lineWidth = 3.0f;
     [normLine stroke];
     
     
@@ -134,7 +125,7 @@
     [[UIColor colorWithRed:111.0/255.0 green:0.0 blue:1.0 alpha:0.2] setFill];
     
     // Adjust the drawing options as needed.
-    aPath.lineWidth = 3;
+    aPath.lineWidth = 3.0f;
     
     // Fill the path before stroking it so that the fill
     // color does not obscure the stroked line.
@@ -145,6 +136,10 @@
     // ------------------
     // Axes
     // ------------------
+    
+    // X AXIS
+    UIBezierPath *xAxis = [UIBezierPath bezierPath];
+    
     CGFloat marginY = 4.0f;
     CGFloat marginX = 5.0f;
     CGFloat refY = rect.size.height-marginY;
@@ -155,37 +150,113 @@
     // somethings wrong here
 //    CGFloat noOfLogTicks = (logf((PARQ_MAX_F0*2.0L*M_PI)/44100.0L)-logf((PARQ_MIN_F0*2.0L*M_PI)/44100.0L))/logf(10);
 
-    CGFloat noOfLogTicks = (PARQ_MAX_F0-PARQ_MIN_F0)/1000.0f;
-
-    UIBezierPath *xAxis = [UIBezierPath bezierPath];
+    CGFloat noOfLogTicks = log10f(PARQ_MAX_F0/PARQ_MIN_F0)/log10f(10);
     
     [xAxis moveToPoint:CGPointMake(marginX, refHighY)];
     [xAxis addLineToPoint:CGPointMake(marginX, refY)];
     
     for (int i = 0; i < noOfLogTicks; i++) {
+        
+        // Ticks
         tickX = (float)(i*((PARQ_MAX_F0-PARQ_MIN_F0)/noOfLogTicks))/(PARQ_MAX_F0-PARQ_MIN_F0)*rect.size.width+marginX;
         [xAxis addLineToPoint:CGPointMake(tickX, refY)];
         [xAxis addLineToPoint:CGPointMake(tickX, refHighY)];
         [xAxis moveToPoint:CGPointMake(tickX, refY)];
         
 //        NSLog(@"x ticks i: %d atpos: %f range: %f noOfLogTicks: %f", i, tickX, PARQ_MAX_F0-PARQ_MIN_F0, noOfLogTicks);
+        
+        // Tick Labels
+        
+        CGFloat labelWidth = 30.0f;
+        CGFloat labelHeight = 15.0f;
+        CGFloat labelX = tickX-labelWidth/2;
+        CGFloat labelY = refY-labelHeight-5.0f;
+        CGRect labelRect = CGRectMake(labelX, labelY, labelWidth, labelHeight);
+        UILabel *label = [[UILabel alloc] initWithFrame:labelRect];
+        [label setText:[NSString stringWithFormat:@"%.0f", pow(10, i+1)]];
+        label.adjustsFontSizeToFitWidth = NO;
+        [label setFont:[UIFont fontWithName:@"Helvetica" size:10]];
+        label.textColor = [UIColor whiteColor];
+        label.backgroundColor = [UIColor clearColor];
+        // set alignment based on position
+        if (i == 0) {
+            [label setTextAlignment:NSTextAlignmentLeft];
+            [label setFrame:CGRectMake(labelX+labelWidth/2, labelY, labelWidth, labelHeight)];
+        } else if (i == ((int)noOfLogTicks)) {
+            [label setTextAlignment:NSTextAlignmentRight];
+            [label setFrame:CGRectMake(labelX-labelWidth/2, labelY, labelWidth, labelHeight)];
+        } else {
+        [label setTextAlignment:NSTextAlignmentCenter];
+        }
+        [self addSubview:label];
     }
     
-    // Set the render colors.
+    // Setup stroke.
     [[UIColor whiteColor] setStroke];
-    
-    // Adjust the drawing options as needed.
     xAxis.lineWidth = 1.0f;
-    
-    // Fill the path before stroking it so that the fill
-    // color does not obscure the stroked line.
     [xAxis stroke];
     
-    // Background Drawing
+    
+    // Y AXIS
+    UIBezierPath *yAxis = [UIBezierPath bezierPath];
+    
+
+    CGFloat refX = 4.0f;
+    CGFloat refHighX = refX+4.0f;
+    
+    CGFloat tickY;
+    
+    // somethings wrong here
+    //    CGFloat noOfLogTicks = (logf((PARQ_MAX_F0*2.0L*M_PI)/44100.0L)-logf((PARQ_MIN_F0*2.0L*M_PI)/44100.0L))/logf(10);
+    
+    CGFloat noOfYTicks = (fabsf(PARQ_MAX_GAIN)+fabsf(PARQ_MIN_GAIN))/6.0f;
+    
+    [yAxis moveToPoint:CGPointMake(refHighX, marginY)];
+    [yAxis addLineToPoint:CGPointMake(refX, marginY)];
+    
+    for (int i = 0; i < noOfYTicks; i++) {
+        
+        // Ticks
+        tickY = marginY+((rect.size.height-2*marginY)*(((float)i)/noOfYTicks));
+        [yAxis addLineToPoint:CGPointMake(refX, tickY)];
+        [yAxis addLineToPoint:CGPointMake(refHighX, tickY)];
+        [yAxis moveToPoint:CGPointMake(refX, tickY)];
+        
+//        NSLog(@"x ticks i: %d atpos: %f range: %f noOfLogTicks: %f", i, tickY, PARQ_MAX_F0-PARQ_MIN_F0, noOfLogTicks);
+        
+        // Tick Labels
+        
+        CGFloat labelWidth = 30.0f;
+        CGFloat labelHeight = 15.0f;
+        CGFloat labelY = tickY-labelHeight/2;
+        CGFloat labelX = refX+10.0f;
+        CGRect labelRect = CGRectMake(labelX, labelY, labelWidth, labelHeight);
+        UILabel *label = [[UILabel alloc] initWithFrame:labelRect];
+        [label setText:[NSString stringWithFormat:@"%.0f", PARQ_MAX_GAIN-(i*6.0f)]];
+        label.adjustsFontSizeToFitWidth = NO;
+        [label setFont:[UIFont fontWithName:@"Helvetica" size:10]];
+        label.textColor = [UIColor whiteColor];
+        label.backgroundColor = [UIColor clearColor];
+        [label setTextAlignment:NSTextAlignmentLeft];
+        // set alignment based on position
+        if (i == 0) {
+            [label setFrame:CGRectMake(labelX, labelY+labelHeight/2-4.0f, labelWidth, labelHeight)];
+        } else if (i == noOfYTicks) {
+            NSLog(@"case exists");
+            [label setFrame:CGRectMake(labelX, labelY-labelHeight/2, labelWidth, labelHeight)];
+        }
+        [self addSubview:label];
+    }
+
+    // Setup stroke.
+    [[UIColor whiteColor] setStroke];
+    yAxis.lineWidth = 1.0f;
+    [yAxis stroke];
+    
     
 //    CGContextAddPath(context, filterCurve);
     CGContextClip(context);
-    CGContextSetLineWidth(context, 8);
+//    CGContextSetLineWidth(context, 8);
     
     // Cleanup Code
 //    CGPathRelease(filterCurve);

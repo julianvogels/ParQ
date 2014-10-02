@@ -11,9 +11,14 @@
 		B900A03B19D452CD002A8A28 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B900A03A19D452CD002A8A28 /* Media.xcassets */; };
 		B900A03D19D45569002A8A28 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B900A03C19D45569002A8A28 /* QuartzCore.framework */; };
 		B900A04019D47643002A8A28 /* EQView.m in Sources */ = {isa = PBXBuildFile; fileRef = B900A03F19D47643002A8A28 /* EQView.m */; };
-		B900A04319D481AA002A8A28 /* vDSPTest.m in Sources */ = {isa = PBXBuildFile; fileRef = B900A04219D481AA002A8A28 /* vDSPTest.m */; };
 		B9B47C0619D98C3E0052AEB6 /* SourceSansPro-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = B9B47C0519D98C3E0052AEB6 /* SourceSansPro-ExtraLight.otf */; };
 		B9B47C0D19D9BBFF0052AEB6 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = B9B47C0C19D9BBFF0052AEB6 /* Utils.m */; };
+		B9CDF44319DD440C0026D8FF /* ParQDSP.m in Sources */ = {isa = PBXBuildFile; fileRef = B9CDF44219DD440C0026D8FF /* ParQDSP.m */; };
+		B9CDF44519DDD16C0026D8FF /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9CDF44419DDD16C0026D8FF /* CoreMedia.framework */; };
+		B9CDF44719DDD1750026D8FF /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9CDF44619DDD1750026D8FF /* AudioToolbox.framework */; };
+		B9CDF44919DDD17C0026D8FF /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9CDF44819DDD17C0026D8FF /* CoreAudio.framework */; };
+		B9CDF44B19DDD1830026D8FF /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9CDF44A19DDD1830026D8FF /* AVFoundation.framework */; };
+		B9CDF44D19DDD1890026D8FF /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9CDF44C19DDD1890026D8FF /* MediaPlayer.framework */; };
 		B9D241F919DAE3BC00FC01F2 /* apfelsinen.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B9D241F819DAE3BC00FC01F2 /* apfelsinen.m4a */; };
 		B9D241FC19DB004200FC01F2 /* JVPeakingEQ.m in Sources */ = {isa = PBXBuildFile; fileRef = B9D241FB19DB004200FC01F2 /* JVPeakingEQ.m */; };
 		B9D4FED819D428260045A380 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9D4FED719D428260045A380 /* Foundation.framework */; };
@@ -49,12 +54,17 @@
 		B900A03C19D45569002A8A28 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		B900A03E19D47643002A8A28 /* EQView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EQView.h; sourceTree = "<group>"; };
 		B900A03F19D47643002A8A28 /* EQView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EQView.m; sourceTree = "<group>"; };
-		B900A04119D481AA002A8A28 /* vDSPTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vDSPTest.h; sourceTree = "<group>"; };
-		B900A04219D481AA002A8A28 /* vDSPTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = vDSPTest.m; sourceTree = "<group>"; };
 		B9B47C0519D98C3E0052AEB6 /* SourceSansPro-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSansPro-ExtraLight.otf"; sourceTree = "<group>"; };
 		B9B47C0719D9A5180052AEB6 /* constant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = constant.h; sourceTree = "<group>"; };
 		B9B47C0B19D9BBFF0052AEB6 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
 		B9B47C0C19D9BBFF0052AEB6 /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
+		B9CDF44119DD440C0026D8FF /* ParQDSP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParQDSP.h; sourceTree = "<group>"; };
+		B9CDF44219DD440C0026D8FF /* ParQDSP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParQDSP.m; sourceTree = "<group>"; };
+		B9CDF44419DDD16C0026D8FF /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		B9CDF44619DDD1750026D8FF /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		B9CDF44819DDD17C0026D8FF /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
+		B9CDF44A19DDD1830026D8FF /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		B9CDF44C19DDD1890026D8FF /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		B9D241F819DAE3BC00FC01F2 /* apfelsinen.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = apfelsinen.m4a; sourceTree = "<group>"; };
 		B9D241FA19DB004200FC01F2 /* JVPeakingEQ.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVPeakingEQ.h; sourceTree = "<group>"; };
 		B9D241FB19DB004200FC01F2 /* JVPeakingEQ.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JVPeakingEQ.m; sourceTree = "<group>"; };
@@ -84,6 +94,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B9CDF44D19DDD1890026D8FF /* MediaPlayer.framework in Frameworks */,
+				B9CDF44B19DDD1830026D8FF /* AVFoundation.framework in Frameworks */,
+				B9CDF44919DDD17C0026D8FF /* CoreAudio.framework in Frameworks */,
+				B9CDF44719DDD1750026D8FF /* AudioToolbox.framework in Frameworks */,
+				B9CDF44519DDD16C0026D8FF /* CoreMedia.framework in Frameworks */,
 				B900A03D19D45569002A8A28 /* QuartzCore.framework in Frameworks */,
 				B9D4FEDA19D428260045A380 /* CoreGraphics.framework in Frameworks */,
 				B9D4FEDC19D428260045A380 /* UIKit.framework in Frameworks */,
@@ -137,6 +152,11 @@
 		B9D4FED619D428260045A380 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B9CDF44C19DDD1890026D8FF /* MediaPlayer.framework */,
+				B9CDF44A19DDD1830026D8FF /* AVFoundation.framework */,
+				B9CDF44819DDD17C0026D8FF /* CoreAudio.framework */,
+				B9CDF44619DDD1750026D8FF /* AudioToolbox.framework */,
+				B9CDF44419DDD16C0026D8FF /* CoreMedia.framework */,
 				B900A03C19D45569002A8A28 /* QuartzCore.framework */,
 				B9D4FED719D428260045A380 /* Foundation.framework */,
 				B9D4FED919D428260045A380 /* CoreGraphics.framework */,
@@ -157,8 +177,8 @@
 				B9D4FEE919D428260045A380 /* Main.storyboard */,
 				B9D241FA19DB004200FC01F2 /* JVPeakingEQ.h */,
 				B9D241FB19DB004200FC01F2 /* JVPeakingEQ.m */,
-				B900A04119D481AA002A8A28 /* vDSPTest.h */,
-				B900A04219D481AA002A8A28 /* vDSPTest.m */,
+				B9CDF44119DD440C0026D8FF /* ParQDSP.h */,
+				B9CDF44219DD440C0026D8FF /* ParQDSP.m */,
 				B900A03719D44973002A8A28 /* EQViewController.h */,
 				B900A03819D44973002A8A28 /* EQViewController.m */,
 				B900A03E19D47643002A8A28 /* EQView.h */,
@@ -336,13 +356,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B900A04319D481AA002A8A28 /* vDSPTest.m in Sources */,
 				B900A04019D47643002A8A28 /* EQView.m in Sources */,
 				B9D241FC19DB004200FC01F2 /* JVPeakingEQ.m in Sources */,
 				B9D4FEE819D428260045A380 /* AppDelegate.m in Sources */,
 				B9B47C0D19D9BBFF0052AEB6 /* Utils.m in Sources */,
 				B900A03919D44973002A8A28 /* EQViewController.m in Sources */,
 				B9D4FEE419D428260045A380 /* main.m in Sources */,
+				B9CDF44319DD440C0026D8FF /* ParQDSP.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

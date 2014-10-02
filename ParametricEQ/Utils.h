@@ -13,6 +13,10 @@
 +(float)convertToNormF0:(float)frequency;
 +(float)convertToNormGain:(float)gain;
 +(float)convertToBandwidth:(float)q;
++(float)convertToLogScale:(float)frequency;
++(BOOL)coreAudioCanOpenURL:(NSURL*)url;
+
+
 
 
 

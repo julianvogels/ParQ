@@ -7,17 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-// Novocaine DSP
-#import <Novocaine/Novocaine.h>
-#import <Novocaine/AudioFileReader.h>
-#import <Novocaine/RingBuffer.h>
-// NVDSP
-#import <NVDSP/NVPeakingEQFilter.h>
-#import <NVDSP/NVDSP.h>
-#import <Accelerate/Accelerate.h>
-// Custom Class
-#import "JVPeakingEQ.h"
-
+// ParQDSP
+#import "ParQDSP.h"
 // Basic Graphics
 #import <QuartzCore/QuartzCore.h>
 // Contants
@@ -27,32 +18,21 @@
 // Utils
 #import "Utils.h"
 
-@interface EQViewController : UIViewController <JVPeakingEQDelegate> {
-    float *gInputKeepBuffer[2];
-    float *gOutputKeepBuffer[2];
-}
+// Pick iTunes Song
 
-// Novocaine
-@property (strong, nonatomic) Novocaine *audioManager;
-@property (strong, nonatomic) AudioFileReader *fileReader;
-@property (assign, nonatomic) BOOL isRealTimeAudio;
-@property (strong, nonatomic) JVPeakingEQ *JVPEF;
+#import <CoreAudio/CoreAudioTypes.h>
+#import <AudioToolbox/AudioToolbox.h>
+#import <MediaPlayer/MediaPlayer.h>
+#import <AVFoundation/AVFoundation.h>
+#import <CoreMedia/CoreMedia.h>
 
-// Samplerate
-@property (assign, nonatomic) float fs;
+@interface EQViewController : UIViewController <JVPeakingEQDelegate, MPMediaPickerControllerDelegate>
 
-// Meta coeffs
-@property (assign, nonatomic, setter=setCenterFrequency:) float f0;
-@property (assign, nonatomic, setter=setGain:) float g;
-@property (assign, nonatomic, setter=setQ:) float q;
-
-// Coeffs
-@property (strong, nonatomic) NSMutableArray *coeffs;
-@property (assign, nonatomic) double b0, b1, b2, a0, a1, a2;
+// ParQDSP
+@property (strong, nonatomic) ParQDSP *dsp;
 
 // Magnitude response
 @property (strong, nonatomic) NSMutableArray *frequencyLocations;
-@property (strong, nonatomic) NSMutableArray *magnitudesAtLocations;
 
 // UI Elements
 @property (strong, nonatomic) IBOutlet EQView *eqView;
@@ -61,12 +41,14 @@
 @property (strong, nonatomic) IBOutlet UILabel *gainLabel;
 @property (strong, nonatomic) IBOutlet UILabel *qLabel;
 @property (strong, nonatomic) IBOutlet UIButton *qButton;
+@property (strong, nonatomic) IBOutlet UIButton *soundFileButton;
 
 // Actions
 - (IBAction)micButtonTouchUpInside:(id)sender;
 - (IBAction)pinchGesture:(UIPinchGestureRecognizer *)sender;
 - (IBAction)panGesture:(UIPanGestureRecognizer *)sender;
 - (IBAction)qButtonTouchUpInside:(id)sender;
+- (IBAction)SoundFileButtonTouchUpInside:(id)sender;
 
 
 @end
