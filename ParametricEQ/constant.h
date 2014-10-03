@@ -9,7 +9,7 @@
 #ifndef ParametricEQ_constant_h
 #define ParametricEQ_constant_h
 
-#define PARQ_MAX_F0 16000.0f
+#define PARQ_MAX_F0 20000.0f
 #define PARQ_MIN_F0 10.0f
 #define PARQ_MAX_Q 25.0f
 
@@ -24,5 +24,7 @@
 
 #define PARQ_DEFAULTS_INPUT NO
 
+#define PARQ_MARGIN_Y 4.0f
+#define PARQ_MARGIN_X 5.0f
 
 #endif

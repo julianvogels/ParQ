@@ -224,9 +224,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		B9D4FED319D428260045A380 /* ParametricEQ */ = {
+		B9D4FED319D428260045A380 /* ParQ */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B9D4FF0619D428260045A380 /* Build configuration list for PBXNativeTarget "ParametricEQ" */;
+			buildConfigurationList = B9D4FF0619D428260045A380 /* Build configuration list for PBXNativeTarget "ParQ" */;
 			buildPhases = (
 				A21129CCAAAB4588AA1152B1 /* Check Pods Manifest.lock */,
 				B9D4FED019D428260045A380 /* Sources */,
@@ -238,7 +238,7 @@
 			);
 			dependencies = (
 			);
-			name = ParametricEQ;
+			name = ParQ;
 			productName = ParametricEQ;
 			productReference = B9D4FED419D428260045A380 /* ParametricEQ.app */;
 			productType = "com.apple.product-type.application";
@@ -288,7 +288,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				B9D4FED319D428260045A380 /* ParametricEQ */,
+				B9D4FED319D428260045A380 /* ParQ */,
 				B9D4FEF419D428260045A380 /* ParametricEQTests */,
 			);
 		};
@@ -379,7 +379,7 @@
 /* Begin PBXTargetDependency section */
 		B9D4FEFB19D428260045A380 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = B9D4FED319D428260045A380 /* ParametricEQ */;
+			target = B9D4FED319D428260045A380 /* ParQ */;
 			targetProxy = B9D4FEFA19D428260045A380 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -564,7 +564,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B9D4FF0619D428260045A380 /* Build configuration list for PBXNativeTarget "ParametricEQ" */ = {
+		B9D4FF0619D428260045A380 /* Build configuration list for PBXNativeTarget "ParQ" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B9D4FF0719D428260045A380 /* Debug */,

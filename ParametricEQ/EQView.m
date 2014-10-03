@@ -42,9 +42,13 @@
 {
     
     //Draw nice three-step gradient in the back of the EQView (draw this first!)
-    UIColor * farStop = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1.0];
-    UIColor * middleStop = [UIColor colorWithRed:78.0/255.0 green:99.0/255.0 blue:112.0/255.0 alpha:1.0];
-    UIColor * baseColor = [UIColor colorWithRed:93.0/255.0 green:134.0/255.0 blue:160.0/255.0 alpha:1.0];
+//    UIColor * farStop = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1.0];
+//    UIColor * middleStop = [UIColor colorWithRed:78.0/255.0 green:99.0/255.0 blue:112.0/255.0 alpha:1.0];
+//    UIColor * baseColor = [UIColor colorWithRed:93.0/255.0 green:134.0/255.0 blue:160.0/255.0 alpha:1.0];
+
+    UIColor * farStop = [UIColor colorWithWhite:0.2 alpha:1.0];
+    UIColor * middleStop = [UIColor colorWithWhite:0.4 alpha:1.0];
+    UIColor * baseColor = [UIColor colorWithWhite:0.1 alpha:1.0];
     
     CGContextSaveGState(context);
     NSArray * gradientColors = @[(__bridge id)baseColor.CGColor, (__bridge id)middleStop.CGColor, (__bridge id)farStop.CGColor];
@@ -76,31 +80,9 @@
     
     CGContextSaveGState(context);
     
+    
     _normLineY = rect.size.height*(fabs(PARQ_MAX_GAIN)/(fabs(PARQ_MAX_GAIN)+fabs(PARQ_MIN_GAIN)));
 
-
-//    CGContextSetLineWidth(context, 2.0f);
-    
-        // Draw the filter curve (no curve fitting)
-//    CGMutablePathRef filterCurve = CGPathCreateMutable();
-//    CGPathMoveToPoint(filterCurve, nil, -5, normLineY);
-//    
-//   
-//    CGPoint point;
-    
-//    if (_points != nil) {
-//        for (int i = 0; i < _points.count; i++) {
-//            point = [[_points objectAtIndex:i] CGPointValue];
-//            
-//            CGPathAddLineToPoint(filterCurve, nil, point.x, point.y);
-//        }
-//    }
-    
-//    CGPathAddLineToPoint(filterCurve, nil, rect.size.width, normLineY);
-//    CGPathAddLineToPoint(filterCurve, nil, 580, rect.size.width);
-//    CGPathAddLineToPoint(filterCurve, nil, -5, rect.size.width);
-//    
-//    CGPathCloseSubpath(filterCurve);
     
     // ------------------
     // Draw the norm line
@@ -132,6 +114,20 @@
     [aPath fill];
     [aPath stroke];
     
+    // ------------------
+    // Draw vertical lines
+    // ------------------
+    for (int i = 0; i < [_points count]; i++) {
+        UIBezierPath *debugLine = [UIBezierPath bezierPath];
+        CGFloat xVal = [[_points objectAtIndex:i] CGPointValue].x;
+
+        [debugLine moveToPoint:CGPointMake(xVal, -5.0f)];
+        [debugLine addLineToPoint:CGPointMake(xVal, rect.size.height + 5.0f)];
+        
+        [[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.2] setStroke];
+        debugLine.lineWidth = 1.0f;
+        [debugLine stroke];
+    }
     
     // ------------------
     // Axes
@@ -140,9 +136,7 @@
     // X AXIS
     UIBezierPath *xAxis = [UIBezierPath bezierPath];
     
-    CGFloat marginY = 4.0f;
-    CGFloat marginX = 5.0f;
-    CGFloat refY = rect.size.height-marginY;
+    CGFloat refY = rect.size.height-PARQ_MARGIN_Y;
     CGFloat refHighY = refY-8.0f;
     
     CGFloat tickX;
@@ -152,18 +146,22 @@
 
     CGFloat noOfLogTicks = log10f(PARQ_MAX_F0/PARQ_MIN_F0)/log10f(10);
     
-    [xAxis moveToPoint:CGPointMake(marginX, refHighY)];
-    [xAxis addLineToPoint:CGPointMake(marginX, refY)];
+    [xAxis moveToPoint:CGPointMake(PARQ_MARGIN_X, refHighY)];
+    [xAxis addLineToPoint:CGPointMake(PARQ_MARGIN_X, refY)];
     
-    for (int i = 0; i < noOfLogTicks; i++) {
+    for (int i = 0; i < noOfLogTicks+1; i++) {
         
         // Ticks
-        tickX = (float)(i*((PARQ_MAX_F0-PARQ_MIN_F0)/noOfLogTicks))/(PARQ_MAX_F0-PARQ_MIN_F0)*rect.size.width+marginX;
+        if (i<=noOfLogTicks) {
+            tickX = (float)(i*((PARQ_MAX_F0-PARQ_MIN_F0)/noOfLogTicks))/(PARQ_MAX_F0-PARQ_MIN_F0)*(rect.size.width-2*PARQ_MARGIN_X)+PARQ_MARGIN_X;
+        } else {
+            tickX = rect.size.width-PARQ_MARGIN_X;
+        }
         [xAxis addLineToPoint:CGPointMake(tickX, refY)];
         [xAxis addLineToPoint:CGPointMake(tickX, refHighY)];
         [xAxis moveToPoint:CGPointMake(tickX, refY)];
         
-//        NSLog(@"x ticks i: %d atpos: %f range: %f noOfLogTicks: %f", i, tickX, PARQ_MAX_F0-PARQ_MIN_F0, noOfLogTicks);
+        //        NSLog(@"x ticks i: %d atpos: %f range: %f noOfLogTicks: %f", i, tickX, PARQ_MAX_F0-PARQ_MIN_F0, noOfLogTicks);
         
         // Tick Labels
         
@@ -173,7 +171,11 @@
         CGFloat labelY = refY-labelHeight-5.0f;
         CGRect labelRect = CGRectMake(labelX, labelY, labelWidth, labelHeight);
         UILabel *label = [[UILabel alloc] initWithFrame:labelRect];
-        [label setText:[NSString stringWithFormat:@"%.0f", pow(10, i+1)]];
+        if (i<=noOfLogTicks) {
+            [label setText:[NSString stringWithFormat:@"%.0f", pow(10, i+1)]];
+        } else {
+            [label setText:[NSString stringWithFormat:@"%.0f", PARQ_MAX_F0]];
+        }
         label.adjustsFontSizeToFitWidth = NO;
         [label setFont:[UIFont fontWithName:@"Helvetica" size:10]];
         label.textColor = [UIColor whiteColor];
@@ -182,7 +184,7 @@
         if (i == 0) {
             [label setTextAlignment:NSTextAlignmentLeft];
             [label setFrame:CGRectMake(labelX+labelWidth/2, labelY, labelWidth, labelHeight)];
-        } else if (i == ((int)noOfLogTicks)) {
+        } else if (i >= ((int)noOfLogTicks)) {
             [label setTextAlignment:NSTextAlignmentRight];
             [label setFrame:CGRectMake(labelX-labelWidth/2, labelY, labelWidth, labelHeight)];
         } else {
@@ -211,13 +213,13 @@
     
     CGFloat noOfYTicks = (fabsf(PARQ_MAX_GAIN)+fabsf(PARQ_MIN_GAIN))/6.0f;
     
-    [yAxis moveToPoint:CGPointMake(refHighX, marginY)];
-    [yAxis addLineToPoint:CGPointMake(refX, marginY)];
+    [yAxis moveToPoint:CGPointMake(refHighX, PARQ_MARGIN_Y)];
+    [yAxis addLineToPoint:CGPointMake(refX, PARQ_MARGIN_Y)];
     
     for (int i = 0; i < noOfYTicks; i++) {
         
         // Ticks
-        tickY = marginY+((rect.size.height-2*marginY)*(((float)i)/noOfYTicks));
+        tickY = PARQ_MARGIN_Y+((rect.size.height-2*PARQ_MARGIN_Y)*(((float)i)/noOfYTicks));
         [yAxis addLineToPoint:CGPointMake(refX, tickY)];
         [yAxis addLineToPoint:CGPointMake(refHighX, tickY)];
         [yAxis moveToPoint:CGPointMake(refX, tickY)];
@@ -254,12 +256,10 @@
     [yAxis stroke];
     
     
-//    CGContextAddPath(context, filterCurve);
+
     CGContextClip(context);
-//    CGContextSetLineWidth(context, 8);
+
     
-    // Cleanup Code
-//    CGPathRelease(filterCurve);
     CGContextRestoreGState(context);
     
 }

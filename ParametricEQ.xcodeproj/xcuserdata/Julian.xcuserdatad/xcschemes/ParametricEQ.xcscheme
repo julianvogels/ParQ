@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "B9D4FED319D428260045A380"
-               BuildableName = "ParametricEQ.app"
-               BlueprintName = "ParametricEQ"
+               BuildableName = "ParQ.app"
+               BlueprintName = "ParQ"
                ReferencedContainer = "container:ParametricEQ.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -43,8 +43,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "B9D4FED319D428260045A380"
-            BuildableName = "ParametricEQ.app"
-            BlueprintName = "ParametricEQ"
+            BuildableName = "ParQ.app"
+            BlueprintName = "ParQ"
             ReferencedContainer = "container:ParametricEQ.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -62,8 +62,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "B9D4FED319D428260045A380"
-            BuildableName = "ParametricEQ.app"
-            BlueprintName = "ParametricEQ"
+            BuildableName = "ParQ.app"
+            BlueprintName = "ParQ"
             ReferencedContainer = "container:ParametricEQ.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -80,8 +80,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "B9D4FED319D428260045A380"
-            BuildableName = "ParametricEQ.app"
-            BlueprintName = "ParametricEQ"
+            BuildableName = "ParQ.app"
+            BlueprintName = "ParQ"
             ReferencedContainer = "container:ParametricEQ.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

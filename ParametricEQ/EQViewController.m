@@ -48,11 +48,11 @@
         frequencyPoint = PARQ_MIN_F0+((double)PARQ_MAX_F0-(double)PARQ_MIN_F0)/((double)PARQ_CURVE_ACCURACY)*((double)i);
         // x'i = (log(xi)-log(xmin)) / (log(xmax)-log(xmin))
         
-        //        frequencyLogPoint = PARQ_MIN_F0+(logf((double)PARQ_MAX_F0)/logf((double)PARQ_MIN_F0))/(logf((double)PARQ_MAX_F0)-logf((double)PARQ_MIN_F0))/((double)PARQ_CURVE_ACCURACY)*((double)i);
+//        frequencyLogPoint = PARQ_MIN_F0+(logf((double)PARQ_MAX_F0)/logf((double)PARQ_MIN_F0))/(logf((double)PARQ_MAX_F0)-logf((double)PARQ_MIN_F0))/((double)PARQ_CURVE_ACCURACY)*((double)i);
         
-        //        frequencyLogPoint = [Utils convertToLogScale:frequencyPoint];
+        frequencyLogPoint = log10f(frequencyPoint);
         
-        frequencyLogPoint = frequencyPoint;
+//        frequencyLogPoint = frequencyPoint;
         
         NSLog(@"frequencypoint: %f log: %f \n", frequencyPoint, frequencyLogPoint);
         
@@ -108,7 +108,8 @@
     for (int i = 0; i < [_frequencyLocations count]; ++ i) {
         
         // convert frequency points to normalized frequency on unit circle
-        omega = 2.0L*M_PI*[Utils convertToLogScale:[[_frequencyLocations objectAtIndex:i] doubleValue]] / dsp.fs;
+        float logFreqPointinHz = (([[_frequencyLocations objectAtIndex:i] doubleValue]/log10f(PARQ_MAX_F0))*(PARQ_MAX_F0-PARQ_MIN_F0));
+        omega = 2.0L*M_PI*logFreqPointinHz / dsp.fs;
         
         // biquad magnitude response (http://rs-met.com/documents/dsp/BasicDigitalFilters.pdf p.2)
         numerator = powl(b0, 2) + powl(b1, 2) + powl(b2, 2) + 2.0L*(b0*b1 + b1*b2)*cosl(omega) + 2.0L*b0*b2*cosl(2.0L*omega);
@@ -117,9 +118,10 @@
         
         //        NSLog(@"FreqPoint: %f\tomega:\t%LF\tnumerator:\t%LF\tdenominator:\t%LF\tmagnitude:\t%LF",[[_frequencyLocations objectAtIndex:i] doubleValue], omega, numerator, denominator, magnitude);
         
-        
         // Calculating absolute x value
-        CGFloat x = ([[_frequencyLocations objectAtIndex:i] floatValue]/(PARQ_MAX_F0-PARQ_MIN_F0))*eqView.frame.size.width;
+        CGFloat x10 = pow(10, [[_frequencyLocations objectAtIndex:i] floatValue]);
+        // Value over frequency range times actual width of the view
+        CGFloat x = (x10/(PARQ_MAX_F0-PARQ_MIN_F0))*(eqView.frame.size.width-2*PARQ_MARGIN_X);
         
         //        CGFloat logmax = log10f(PARQ_MAX_F0 / PARQ_MIN_F0);
         //        CGFloat X = eqView.frame.size.width * log10f([[_frequencyLocations objectAtIndex:i] floatValue] / PARQ_MIN_F0) / logmax;
@@ -137,7 +139,7 @@
         [points insertObject:[NSValue valueWithCGPoint:CGPointMake(x, y)] atIndex:i];
     }
     
-    NSLog(@"Points array: %@", points);
+//    NSLog(@"Points array: %@", points);
     
     return points;
     
