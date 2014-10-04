@@ -32,6 +32,7 @@
     
     [self drawBackgroundInRect:rect inContext:context withColorSpace:colorSpace];
     [self drawFilterCurveInRect:rect inContext:context withColorSpace:colorSpace];
+    [self drawAxesInRect:rect inContext:context withColorSpace:colorSpace];
     
     
     
@@ -41,11 +42,15 @@
 -(void) drawBackgroundInRect: (CGRect)rect inContext: (CGContextRef)context withColorSpace: (CGColorSpaceRef)colorSpace
 {
     
-    //Draw nice three-step gradient in the back of the EQView (draw this first!)
+    // thanks to http://www.raywenderlich.com/34003/core-graphics-tutorial-curves-and-layers
+    
+    // NI Colors
 //    UIColor * farStop = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1.0];
 //    UIColor * middleStop = [UIColor colorWithRed:78.0/255.0 green:99.0/255.0 blue:112.0/255.0 alpha:1.0];
 //    UIColor * baseColor = [UIColor colorWithRed:93.0/255.0 green:134.0/255.0 blue:160.0/255.0 alpha:1.0];
 
+    //Draw nice three-step gradient in the back of the EQView (draw this first!)
+    // GreyScale colors
     UIColor * farStop = [UIColor colorWithWhite:0.2 alpha:1.0];
     UIColor * middleStop = [UIColor colorWithWhite:0.4 alpha:1.0];
     UIColor * baseColor = [UIColor colorWithWhite:0.1 alpha:1.0];
@@ -128,6 +133,16 @@
         debugLine.lineWidth = 1.0f;
         [debugLine stroke];
     }
+
+    CGContextClip(context);
+
+    
+    CGContextRestoreGState(context);
+    
+}
+
+-(void)drawAxesInRect: (CGRect)rect inContext: (CGContextRef)context withColorSpace: (CGColorSpaceRef)colorSpace {
+    CGContextSaveGState(context);
     
     // ------------------
     // Axes
@@ -141,30 +156,26 @@
     
     CGFloat tickX;
     
-    // somethings wrong here
-//    CGFloat noOfLogTicks = (logf((PARQ_MAX_F0*2.0L*M_PI)/44100.0L)-logf((PARQ_MIN_F0*2.0L*M_PI)/44100.0L))/logf(10);
-
     CGFloat noOfLogTicks = log10f(PARQ_MAX_F0/PARQ_MIN_F0)/log10f(10);
-    
     [xAxis moveToPoint:CGPointMake(PARQ_MARGIN_X, refHighY)];
     [xAxis addLineToPoint:CGPointMake(PARQ_MARGIN_X, refY)];
     
-    for (int i = 0; i < noOfLogTicks+1; i++) {
+    for (int i = 0; i < noOfLogTicks; i++) {
         
         // Ticks
         if (i<=noOfLogTicks) {
-            tickX = (float)(i*((PARQ_MAX_F0-PARQ_MIN_F0)/noOfLogTicks))/(PARQ_MAX_F0-PARQ_MIN_F0)*(rect.size.width-2*PARQ_MARGIN_X)+PARQ_MARGIN_X;
+            tickX = (((float)i)/floorf(noOfLogTicks)); // equal spacing
+            tickX *= (rect.size.width-2*PARQ_MARGIN_X)+PARQ_MARGIN_X; // Scaling
+            
         } else {
             tickX = rect.size.width-PARQ_MARGIN_X;
+            
         }
         [xAxis addLineToPoint:CGPointMake(tickX, refY)];
         [xAxis addLineToPoint:CGPointMake(tickX, refHighY)];
         [xAxis moveToPoint:CGPointMake(tickX, refY)];
         
-        //        NSLog(@"x ticks i: %d atpos: %f range: %f noOfLogTicks: %f", i, tickX, PARQ_MAX_F0-PARQ_MIN_F0, noOfLogTicks);
-        
         // Tick Labels
-        
         CGFloat labelWidth = 30.0f;
         CGFloat labelHeight = 15.0f;
         CGFloat labelX = tickX-labelWidth/2;
@@ -172,7 +183,7 @@
         CGRect labelRect = CGRectMake(labelX, labelY, labelWidth, labelHeight);
         UILabel *label = [[UILabel alloc] initWithFrame:labelRect];
         if (i<=noOfLogTicks) {
-            [label setText:[NSString stringWithFormat:@"%.0f", pow(10, i+1)]];
+            [label setText:[NSString stringWithFormat:@"%.0f", 2*pow(10, i+1)]]; // Label texts
         } else {
             [label setText:[NSString stringWithFormat:@"%.0f", PARQ_MAX_F0]];
         }
@@ -188,7 +199,7 @@
             [label setTextAlignment:NSTextAlignmentRight];
             [label setFrame:CGRectMake(labelX-labelWidth/2, labelY, labelWidth, labelHeight)];
         } else {
-        [label setTextAlignment:NSTextAlignmentCenter];
+            [label setTextAlignment:NSTextAlignmentCenter];
         }
         [self addSubview:label];
     }
@@ -202,14 +213,11 @@
     // Y AXIS
     UIBezierPath *yAxis = [UIBezierPath bezierPath];
     
-
+    
     CGFloat refX = 4.0f;
     CGFloat refHighX = refX+4.0f;
     
     CGFloat tickY;
-    
-    // somethings wrong here
-    //    CGFloat noOfLogTicks = (logf((PARQ_MAX_F0*2.0L*M_PI)/44100.0L)-logf((PARQ_MIN_F0*2.0L*M_PI)/44100.0L))/logf(10);
     
     CGFloat noOfYTicks = (fabsf(PARQ_MAX_GAIN)+fabsf(PARQ_MIN_GAIN))/6.0f;
     
@@ -223,8 +231,6 @@
         [yAxis addLineToPoint:CGPointMake(refX, tickY)];
         [yAxis addLineToPoint:CGPointMake(refHighX, tickY)];
         [yAxis moveToPoint:CGPointMake(refX, tickY)];
-        
-//        NSLog(@"x ticks i: %d atpos: %f range: %f noOfLogTicks: %f", i, tickY, PARQ_MAX_F0-PARQ_MIN_F0, noOfLogTicks);
         
         // Tick Labels
         
@@ -244,24 +250,19 @@
         if (i == 0) {
             [label setFrame:CGRectMake(labelX, labelY+labelHeight/2-4.0f, labelWidth, labelHeight)];
         } else if (i == noOfYTicks) {
-            NSLog(@"case exists");
             [label setFrame:CGRectMake(labelX, labelY-labelHeight/2, labelWidth, labelHeight)];
         }
         [self addSubview:label];
     }
-
+    
     // Setup stroke.
     [[UIColor whiteColor] setStroke];
     yAxis.lineWidth = 1.0f;
     [yAxis stroke];
-    
-    
 
+    
     CGContextClip(context);
-
-    
     CGContextRestoreGState(context);
-    
 }
 
 // thanks to https://stackoverflow.com/questions/8702696/drawing-smooth-curves-methods-needed0

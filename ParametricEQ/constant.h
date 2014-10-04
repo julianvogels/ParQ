@@ -27,4 +27,6 @@
 #define PARQ_MARGIN_Y 4.0f
 #define PARQ_MARGIN_X 5.0f
 
+#define PARQ_Q_SCALINGFACTOR 5.0f
+
 #endif

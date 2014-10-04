@@ -45,7 +45,6 @@
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <gestureRecognizers/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="487" id="RVt-VI-Ycs"/>
                                     <constraint firstAttribute="height" constant="292" id="kN2-T0-ZTF"/>
                                 </constraints>
                                 <connections>

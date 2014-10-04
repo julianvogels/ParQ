@@ -47,18 +47,24 @@
     for (int i = 0; i <= PARQ_CURVE_ACCURACY; i++) {
         frequencyPoint = PARQ_MIN_F0+((double)PARQ_MAX_F0-(double)PARQ_MIN_F0)/((double)PARQ_CURVE_ACCURACY)*((double)i);
         // x'i = (log(xi)-log(xmin)) / (log(xmax)-log(xmin))
+        frequencyPoint = 20*powf(10, (((float)i)/((float)PARQ_CURVE_ACCURACY))*3.0f);
+        NSLog(@"20*10^%f = %f", (((float)i)/((float)PARQ_CURVE_ACCURACY))*3.0f, 20*powf(10, (((float)i)/((float)PARQ_CURVE_ACCURACY))*3.0f));
         
 //        frequencyLogPoint = PARQ_MIN_F0+(logf((double)PARQ_MAX_F0)/logf((double)PARQ_MIN_F0))/(logf((double)PARQ_MAX_F0)-logf((double)PARQ_MIN_F0))/((double)PARQ_CURVE_ACCURACY)*((double)i);
+//        float anotherLogPoint = PARQ_MIN_F0+(logf((double)PARQ_MAX_F0)/logf((double)PARQ_MIN_F0))/(logf((double)PARQ_MAX_F0));
+//        frequencyLogPoint = log10f(frequencyPoint);
         
-        frequencyLogPoint = log10f(frequencyPoint);
+        // convert frequency points to normalized frequency on unit circle
+//        float logFreqPointinHz = ((frequencyLogPoint/log10f(PARQ_MAX_F0))*(PARQ_MAX_F0-PARQ_MIN_F0));
         
 //        frequencyLogPoint = frequencyPoint;
         
-        NSLog(@"frequencypoint: %f log: %f \n", frequencyPoint, frequencyLogPoint);
+//        NSLog(@"frequencypoint: %f log: %f \n anotherlog: %f", frequencyPoint, frequencyLogPoint,  anotherLogPoint);
         
-        [_frequencyLocations insertObject:[NSNumber numberWithDouble:frequencyLogPoint] atIndex:i];
-        [defaultPoints insertObject:[NSValue valueWithCGPoint:CGPointMake(frequencyLogPoint, [Utils convertToNormGain:0.0f])] atIndex:i];
+        [_frequencyLocations insertObject:[NSNumber numberWithDouble:frequencyPoint] atIndex:i];
+        [defaultPoints insertObject:[NSValue valueWithCGPoint:CGPointMake(frequencyPoint+PARQ_MARGIN_Y, [Utils convertToNormGain:0.0f])] atIndex:i];
     }
+    
     self.eqView.points = defaultPoints;
     [eqView setNeedsDisplay];
     
@@ -106,10 +112,8 @@
     
     // calculate biquad magnitude for n frequency points
     for (int i = 0; i < [_frequencyLocations count]; ++ i) {
-        
-        // convert frequency points to normalized frequency on unit circle
-        float logFreqPointinHz = (([[_frequencyLocations objectAtIndex:i] doubleValue]/log10f(PARQ_MAX_F0))*(PARQ_MAX_F0-PARQ_MIN_F0));
-        omega = 2.0L*M_PI*logFreqPointinHz / dsp.fs;
+    
+        omega = 2.0L*M_PI*[[_frequencyLocations objectAtIndex:i] doubleValue] / dsp.fs;
         
         // biquad magnitude response (http://rs-met.com/documents/dsp/BasicDigitalFilters.pdf p.2)
         numerator = powl(b0, 2) + powl(b1, 2) + powl(b2, 2) + 2.0L*(b0*b1 + b1*b2)*cosl(omega) + 2.0L*b0*b2*cosl(2.0L*omega);
@@ -119,10 +123,13 @@
         //        NSLog(@"FreqPoint: %f\tomega:\t%LF\tnumerator:\t%LF\tdenominator:\t%LF\tmagnitude:\t%LF",[[_frequencyLocations objectAtIndex:i] doubleValue], omega, numerator, denominator, magnitude);
         
         // Calculating absolute x value
-        CGFloat x10 = pow(10, [[_frequencyLocations objectAtIndex:i] floatValue]);
+        CGFloat x10 = log10f([[_frequencyLocations objectAtIndex:i] floatValue]);
         // Value over frequency range times actual width of the view
-        CGFloat x = (x10/(PARQ_MAX_F0-PARQ_MIN_F0))*(eqView.frame.size.width-2*PARQ_MARGIN_X);
-        
+//        CGFloat x = (x10/(PARQ_MAX_F0-PARQ_MIN_F0))*(eqView.frame.size.width-2*PARQ_MARGIN_X);
+
+        CGFloat x = PARQ_MARGIN_X+(((float)i)/[_frequencyLocations count])*(eqView.frame.size.width-PARQ_MARGIN_X);
+
+        NSLog(@"X10: %f\tX: %f", x10, x);
         //        CGFloat logmax = log10f(PARQ_MAX_F0 / PARQ_MIN_F0);
         //        CGFloat X = eqView.frame.size.width * log10f([[_frequencyLocations objectAtIndex:i] floatValue] / PARQ_MIN_F0) / logmax;
         //        CGFloat v = PARQ_MIN_F0 * 10 * (logmax * X / eqView.frame.size.width);
@@ -238,9 +245,9 @@
     // local q and then assign
     float qfactor = dsp.JVPEF.Q;
     if (scale < 1.0f && scale > 0.0f && qfactor >= 0.0f) {
-        qfactor = qfactor-((1-scale)/10);
+        qfactor = qfactor-((1.0f-scale)/PARQ_Q_SCALINGFACTOR);
     } else if (scale > 1.0f && qfactor <= PARQ_MAX_Q) {
-        qfactor = qfactor+((scale-1)/10);
+        qfactor = qfactor+((scale-1.0f)/PARQ_Q_SCALINGFACTOR);
     }
     if ([_qButton isSelected]) {
         [self.qLabel setText:[NSString stringWithFormat:@"%.2f", [Utils convertToBandwidth:qfactor]]];
@@ -267,6 +274,9 @@
 - (IBAction)panGesture:(UIPanGestureRecognizer *)sender {
     CGPoint point = [sender locationInView:eqView];
     
+    // TBD add margin
+//    normPanX = (point.x/(eqView.bounds.size.width-2*PARQ_MARGIN_X));
+
     normPanX = (point.x/eqView.bounds.size.width);
     normPanY = (point.y/eqView.bounds.size.height);
     //    NSLog(@"Point: %f\t%f\tProcessed:\t%f\t%f", point.x, point.y, normPanX, normPanY);
@@ -288,7 +298,8 @@
         normF0 = 1.0f;
     }
     
-    float absoluteFreq =[Utils convertToLogScale:(normF0*(PARQ_MAX_F0-PARQ_MIN_F0)+PARQ_MIN_F0)];
+//    float absoluteFreq =[Utils convertToLogScale:(normF0*(PARQ_MAX_F0-PARQ_MIN_F0)+PARQ_MIN_F0)];
+    float absoluteFreq = [Utils convertToLogFrequency:normF0];
     
     //    [self adjustFilterWithCenterFrequency:absoluteFreq dbGain:g Q:q];
     dsp.JVPEF.centerFrequency = absoluteFreq;
@@ -312,7 +323,6 @@
 }
 
 - (void) updateEQView {
-    NSLog(@"upadtyah");
     [eqView setNeedsDisplay];
 }
 @end

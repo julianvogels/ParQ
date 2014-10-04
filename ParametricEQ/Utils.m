@@ -57,4 +57,8 @@
         return valt0 + (valt1 - valt0) * t;
 }
 
++(float)convertToLogFrequency:(float)normVal {
+    return 20*powf(10, normVal*3.0f);
+}
+
 @end

@@ -54,15 +54,17 @@
     JVPEF.sampleRate = self.audioManager.samplingRate;
     
     JVPEF.delegate = self.delegate;
-    JVPEF.centerFrequency = PARQ_DEFAULTS_F0;
-    JVPEF.Q = PARQ_DEFAULTS_Q;
-    JVPEF.G = PARQ_DEFAULTS_G;
+
     
     if (PARQ_DEFAULTS_INPUT) {
         [self setupFilterWithMicInput];
     } else {
         [self setupFilterWithSoundFileURL:[[NSBundle mainBundle] URLForResource:@"apfelsinen" withExtension:@"m4a"]];
     }
+    
+    JVPEF.centerFrequency = PARQ_DEFAULTS_F0;
+    JVPEF.Q = PARQ_DEFAULTS_Q;
+    JVPEF.G = PARQ_DEFAULTS_G;
 }
 
 -(void)setupFilterWithMicInput {
@@ -111,6 +113,7 @@
 }
 
 -(void)setupFilterWithSoundFileURL:(NSURL *)fileUrl {
+    if (fileUrl) {
     if (audioManager.playing) {
         [audioManager pause];
     }
@@ -163,6 +166,9 @@
     
     
     [audioManager play];
+    } else {
+        NSLog(@"WARNING: Could not set up filter - File URL not valid.");
+    }
 }
 
 

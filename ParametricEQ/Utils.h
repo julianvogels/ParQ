@@ -15,6 +15,7 @@
 +(float)convertToBandwidth:(float)q;
 +(float)convertToLogScale:(float)frequency;
 +(BOOL)coreAudioCanOpenURL:(NSURL*)url;
++(float)convertToLogFrequency:(float)normVal;
 
 
 
