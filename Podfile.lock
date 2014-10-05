@@ -1,0 +1,14 @@
+PODS:
+  - Novocaine (0.0.1)
+  - NVDSP (0.0.1):
+    - Novocaine
+
+DEPENDENCIES:
+  - Novocaine (~> 0.0.1)
+  - NVDSP (~> 0.0.1)
+
+SPEC CHECKSUMS:
+  Novocaine: 4ee4149a8089165d09d274c3f5671ae4096285b5
+  NVDSP: 25b02dd9c3b362e1f111e99e274c6c9611ace7e8
+
+COCOAPODS: 0.33.1
