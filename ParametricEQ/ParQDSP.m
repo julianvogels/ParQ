@@ -41,7 +41,8 @@
 
 @synthesize fs;
 
-
+#pragma mark -
+#pragma mark DSP init method
 
 -(void)initDSP {
     
@@ -66,6 +67,9 @@
     JVPEF.Q = PARQ_DEFAULTS_Q;
     JVPEF.G = PARQ_DEFAULTS_G;
 }
+
+#pragma mark -
+#pragma mark DSP setup methods
 
 -(void)setupFilterWithMicInput {
     if (audioManager.playing) {
@@ -189,6 +193,68 @@
     }
     
     return normVal;
+}
+
+
+#pragma mark -
+#pragma mark Filter Graph Methods
+
+- (NSMutableArray *) calculateBiquadMagnitudeResponseWithCoeffs:(float [5])coeffs Locations:(NSMutableArray *)locations inRect:(CGRect)rect {
+    
+    NSMutableArray *points = [[NSMutableArray alloc] initWithCapacity: [locations count]];
+    
+    long double magnitude;
+    
+    //    NSLog(@"------------------------------------------------------------------------");
+    //    NSLog(@"Params: f0: %f\t g: %f\t q %f", JVPEF.centerFrequency, JVPEF.G, JVPEF.Q);
+    //    NSLog(@"Coeffs: b0 %f\t b1 %f\t b2 %f\t a1 %f\t a2 %f", coeffs[0], coeffs[1], coeffs[2], coeffs[3], coeffs[4]);
+    //    NSLog(@"------------------------------------------------------------------------");
+    
+    // calculate biquad magnitude for n frequency points
+    for (int i = 0; i < [locations count]; ++ i) {
+        
+        magnitude = [[self class] performMagnitudeResponseWithCoeffs:coeffs sampleRate:fs andLocation:[[locations objectAtIndex:i] doubleValue]];
+        
+        // Value over frequency range times actual width of the view
+        CGFloat x = PARQ_MARGIN_X+(((float)i)/[locations count])*(rect.size.width-PARQ_MARGIN_X);
+        
+        // Calculating absolute y value
+        CGFloat y = (1.0f-[Utils convertToNormGain:20.0f*log10f(magnitude)])*rect.size.height;
+        
+        if (isnan(y)) {
+            y = 0.0f;
+            NSLog(@"WARNING: caught NaN in calculateBiquadMagnitudeResponseWithCoeffs");
+        }
+        
+        [points insertObject:[NSValue valueWithCGPoint:CGPointMake(x, y)] atIndex:i];
+    }
+    
+    return points;
+    
+}
+
++(long double) performMagnitudeResponseWithCoeffs:(float [5])coeffs sampleRate:(float)fs andLocation:(long double)frequencyPoint {
+    // Declaration of magnitude vars
+    long double omega;
+    long double numerator;
+    long double denominator;
+    long double magnitude;
+    long double b0, b1, b2, a1, a2;
+    
+    b0 = coeffs[0];
+    b1 = coeffs[1];
+    b2 = coeffs[2];
+    a1 = coeffs[3];
+    a2 = coeffs[4];
+    
+    omega = 2.0L*M_PI*frequencyPoint / fs;
+    
+    // biquad magnitude response (http://rs-met.com/documents/dsp/BasicDigitalFilters.pdf p.2)
+    numerator = powl(b0, 2) + powl(b1, 2) + powl(b2, 2) + 2.0L*(b0*b1 + b1*b2)*cosl(omega) + 2.0L*b0*b2*cosl(2.0L*omega);
+    denominator = 1.0L + powl(a1, 2) + powl(a2, 2) + 2.0L*(a1 + a1*a2)*cosl(omega) + 2.0L*a2*cosl(2.0L*omega);
+    magnitude = sqrtl(numerator / denominator);
+
+    return magnitude;
 }
 
 @end

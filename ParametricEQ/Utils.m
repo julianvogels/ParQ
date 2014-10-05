@@ -31,11 +31,6 @@
     return bandwidthOctaves;
 }
 
-+ (float)convertToLogScale:(float)frequency {
-    return log10f(frequency)/log10f(PARQ_MAX_F0)*(PARQ_MAX_F0-PARQ_MIN_F0)+PARQ_MIN_F0;
-}
-
-
 // thanks to https://stackoverflow.com/questions/11364997/pick-music-from-ios-library-and-send-save
 
 +(BOOL)coreAudioCanOpenURL:(NSURL*)url{

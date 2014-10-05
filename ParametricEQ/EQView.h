@@ -14,7 +14,7 @@
 
 @property (strong, nonatomic) NSMutableArray *points;
 @property (assign, nonatomic) CGFloat normLineY;
-
 @property (strong, nonatomic) NSMutableArray *labels;
+
 
 @end

@@ -17,8 +17,6 @@
 - (id) initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        
-        
     }
     return self;
     
@@ -27,14 +25,16 @@
 
 - (void)drawRect:(CGRect)rect
 {
+    
+    
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     
     [self drawBackgroundInRect:rect inContext:context withColorSpace:colorSpace];
+
     [self drawFilterCurveInRect:rect inContext:context withColorSpace:colorSpace];
     [self drawAxesInRect:rect inContext:context withColorSpace:colorSpace];
-    
-    
+
     
     CGColorSpaceRelease(colorSpace);
 }
@@ -134,8 +134,9 @@
         [debugLine stroke];
     }
 
-    CGContextClip(context);
-
+    if(!CGContextIsPathEmpty(context)) {
+        CGContextClip(context);
+    }
     
     CGContextRestoreGState(context);
     
@@ -151,12 +152,12 @@
     // X AXIS
     UIBezierPath *xAxis = [UIBezierPath bezierPath];
     
-    CGFloat refY = rect.size.height-PARQ_MARGIN_Y;
-    CGFloat refHighY = refY-8.0f;
+    static CGFloat refY = rect.size.height-PARQ_MARGIN_Y;
+    static CGFloat refHighY = refY-8.0f;
     
     CGFloat tickX;
-    
     CGFloat noOfLogTicks = log10f(PARQ_MAX_F0/PARQ_MIN_F0)/log10f(10);
+    
     [xAxis moveToPoint:CGPointMake(PARQ_MARGIN_X, refHighY)];
     [xAxis addLineToPoint:CGPointMake(PARQ_MARGIN_X, refY)];
     
@@ -165,7 +166,8 @@
         // Ticks
         if (i<=noOfLogTicks) {
             tickX = (((float)i)/floorf(noOfLogTicks)); // equal spacing
-            tickX *= (rect.size.width-2*PARQ_MARGIN_X)+PARQ_MARGIN_X; // Scaling
+            tickX *= (rect.size.width-2*PARQ_MARGIN_X); // Scaling
+            tickX += PARQ_MARGIN_X; // Margin
             
         } else {
             tickX = rect.size.width-PARQ_MARGIN_X;
@@ -214,8 +216,8 @@
     UIBezierPath *yAxis = [UIBezierPath bezierPath];
     
     
-    CGFloat refX = 4.0f;
-    CGFloat refHighX = refX+4.0f;
+    static CGFloat refX = 4.0f;
+    static CGFloat refHighX = refX+4.0f;
     
     CGFloat tickY;
     
@@ -260,8 +262,9 @@
     yAxis.lineWidth = 1.0f;
     [yAxis stroke];
 
-    
-    CGContextClip(context);
+    if(!CGContextIsPathEmpty(context)) {
+        CGContextClip(context);
+    }
     CGContextRestoreGState(context);
 }
 

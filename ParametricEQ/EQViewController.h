@@ -43,6 +43,14 @@
 @property (strong, nonatomic) IBOutlet UIButton *qButton;
 @property (strong, nonatomic) IBOutlet UIButton *soundFileButton;
 
+// Interpolation
+@property (strong, nonatomic) NSNumber *interpolateFrom;
+@property (strong, nonatomic) NSNumber *interpolateTo;
+@property (assign, nonatomic) CFTimeInterval startTime;
+@property (nonatomic, assign) NSTimeInterval duration;
+@property (nonatomic, assign) NSTimeInterval remainingTime;
+@property (nonatomic, assign) NSTimeInterval lastDrawTime;
+
 // Actions
 - (IBAction)micButtonTouchUpInside:(id)sender;
 - (IBAction)pinchGesture:(UIPinchGestureRecognizer *)sender;

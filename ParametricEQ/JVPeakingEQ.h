@@ -9,7 +9,6 @@
 #import "NVDSP.h"
 #import "constant.h"
 
-
 @protocol JVPeakingEQDelegate <NSObject>
 
 @optional

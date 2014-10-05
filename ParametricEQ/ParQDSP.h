@@ -18,15 +18,9 @@
 #import <Accelerate/Accelerate.h>
 // Custom Class
 #import "JVPeakingEQ.h"
+// Utils
 
-// Delegate protocol
-//@protocol ParQDSPDelegate <NSObject>
-//
-//@optional
-//- (void) updateLevelMeter:(float)level;
-//@end
-
-
+#import "Utils.h"
 
 @interface ParQDSP : NSObject
 
@@ -43,6 +37,7 @@
 -(void)initDSP;
 -(void)setupFilterWithMicInput;
 -(void)setupFilterWithSoundFileURL:(NSURL *)fileUrl;
-
+-(NSMutableArray *)calculateBiquadMagnitudeResponseWithCoeffs:(float [5])coeffs Locations:(NSMutableArray *)locations inRect:(CGRect)rect;
++(long double) performMagnitudeResponseWithCoeffs:(float [5])coeffs sampleRate:(float)fs andLocation:(long double)frequencyPoint;
 
 @end

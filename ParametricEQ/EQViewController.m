@@ -36,44 +36,40 @@
 
 - (void)viewDidLoad
 {
+    
     [super viewDidLoad];
     
+    // ------------------------------------
     // Calculate frequency points for curve
+    // ------------------------------------
     _frequencyLocations = [[NSMutableArray alloc] initWithCapacity:PARQ_CURVE_ACCURACY];
     NSMutableArray *defaultPoints = [[NSMutableArray alloc] initWithCapacity:PARQ_CURVE_ACCURACY];
-    double frequencyPoint;
-    double frequencyLogPoint;
+    long double frequencyPoint;
     
     for (int i = 0; i <= PARQ_CURVE_ACCURACY; i++) {
-        frequencyPoint = PARQ_MIN_F0+((double)PARQ_MAX_F0-(double)PARQ_MIN_F0)/((double)PARQ_CURVE_ACCURACY)*((double)i);
-        // x'i = (log(xi)-log(xmin)) / (log(xmax)-log(xmin))
         frequencyPoint = 20*powf(10, (((float)i)/((float)PARQ_CURVE_ACCURACY))*3.0f);
-        NSLog(@"20*10^%f = %f", (((float)i)/((float)PARQ_CURVE_ACCURACY))*3.0f, 20*powf(10, (((float)i)/((float)PARQ_CURVE_ACCURACY))*3.0f));
-        
-//        frequencyLogPoint = PARQ_MIN_F0+(logf((double)PARQ_MAX_F0)/logf((double)PARQ_MIN_F0))/(logf((double)PARQ_MAX_F0)-logf((double)PARQ_MIN_F0))/((double)PARQ_CURVE_ACCURACY)*((double)i);
-//        float anotherLogPoint = PARQ_MIN_F0+(logf((double)PARQ_MAX_F0)/logf((double)PARQ_MIN_F0))/(logf((double)PARQ_MAX_F0));
-//        frequencyLogPoint = log10f(frequencyPoint);
-        
-        // convert frequency points to normalized frequency on unit circle
-//        float logFreqPointinHz = ((frequencyLogPoint/log10f(PARQ_MAX_F0))*(PARQ_MAX_F0-PARQ_MIN_F0));
-        
-//        frequencyLogPoint = frequencyPoint;
-        
-//        NSLog(@"frequencypoint: %f log: %f \n anotherlog: %f", frequencyPoint, frequencyLogPoint,  anotherLogPoint);
-        
         [_frequencyLocations insertObject:[NSNumber numberWithDouble:frequencyPoint] atIndex:i];
         [defaultPoints insertObject:[NSValue valueWithCGPoint:CGPointMake(frequencyPoint+PARQ_MARGIN_Y, [Utils convertToNormGain:0.0f])] atIndex:i];
     }
-    
     self.eqView.points = defaultPoints;
     [eqView setNeedsDisplay];
     
+    // ------------------------------------
     // Initialize UI
+    // ------------------------------------
     [_freqLabel setText:[NSString stringWithFormat:@"%.0f Hz", PARQ_DEFAULTS_F0]];
     [_gainLabel setText:[NSString stringWithFormat:@"%.2f db", PARQ_DEFAULTS_G]];
     [_qLabel    setText:[NSString stringWithFormat:@"%.2f",    PARQ_DEFAULTS_Q]];
     
+    // ------------------------------------
+    // Initialize interpolation
+    // ------------------------------------
+    self.duration = self.remainingTime = PARQ_INTERP_TIME;
+    self.lastDrawTime = 0;
+    
+    // ------------------------------------
     // Initialize DSP
+    // ------------------------------------
     dsp = [[ParQDSP alloc] init];
     dsp.delegate = self;
     [dsp initDSP];
@@ -85,79 +81,17 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark -
-#pragma mark Filter Graph Methods
-
-- (NSMutableArray *) calculateBiquadMagnitudeResponseWithCoeffs:(float [5])coeffs {
-    
-    // Declaration of magnitude vars
-    long double omega;
-    long double numerator;
-    long double denominator;
-    long double magnitude;
-    long double b0, b1, b2, a1, a2;
-    
-    NSMutableArray *points = [[NSMutableArray alloc] initWithCapacity:[_frequencyLocations count]];
-    
-    b0 = coeffs[0];
-    b1 = coeffs[1];
-    b2 = coeffs[2];
-    a1 = coeffs[3];
-    a2 = coeffs[4];
-    
-    //    NSLog(@"----------------");
-    //    NSLog(@"Params: f0: %f\t g: %f\t q %f", JVPEF.centerFrequency, JVPEF.G, JVPEF.Q);
-    //    NSLog(@"Coeffs: b0 %f\t b1 %f\t b2 %f\t a1 %f\t a2 %f", coeffs[0], coeffs[1], coeffs[2], coeffs[3], coeffs[4]);
-    //    NSLog(@"----------------");
-    
-    // calculate biquad magnitude for n frequency points
-    for (int i = 0; i < [_frequencyLocations count]; ++ i) {
-    
-        omega = 2.0L*M_PI*[[_frequencyLocations objectAtIndex:i] doubleValue] / dsp.fs;
-        
-        // biquad magnitude response (http://rs-met.com/documents/dsp/BasicDigitalFilters.pdf p.2)
-        numerator = powl(b0, 2) + powl(b1, 2) + powl(b2, 2) + 2.0L*(b0*b1 + b1*b2)*cosl(omega) + 2.0L*b0*b2*cosl(2.0L*omega);
-        denominator = 1.0L + powl(a1, 2) + powl(a2, 2) + 2.0L*(a1 + a1*a2)*cosl(omega) + 2.0L*a2*cosl(2.0L*omega);
-        magnitude = sqrtl(numerator / denominator);
-        
-        //        NSLog(@"FreqPoint: %f\tomega:\t%LF\tnumerator:\t%LF\tdenominator:\t%LF\tmagnitude:\t%LF",[[_frequencyLocations objectAtIndex:i] doubleValue], omega, numerator, denominator, magnitude);
-        
-        // Calculating absolute x value
-        CGFloat x10 = log10f([[_frequencyLocations objectAtIndex:i] floatValue]);
-        // Value over frequency range times actual width of the view
-//        CGFloat x = (x10/(PARQ_MAX_F0-PARQ_MIN_F0))*(eqView.frame.size.width-2*PARQ_MARGIN_X);
-
-        CGFloat x = PARQ_MARGIN_X+(((float)i)/[_frequencyLocations count])*(eqView.frame.size.width-PARQ_MARGIN_X);
-
-        NSLog(@"X10: %f\tX: %f", x10, x);
-        //        CGFloat logmax = log10f(PARQ_MAX_F0 / PARQ_MIN_F0);
-        //        CGFloat X = eqView.frame.size.width * log10f([[_frequencyLocations objectAtIndex:i] floatValue] / PARQ_MIN_F0) / logmax;
-        //        CGFloat v = PARQ_MIN_F0 * 10 * (logmax * X / eqView.frame.size.width);
-        //        NSLog(@"Value: %f", v);
-        
-        // Calculating absolute y value
-        CGFloat y = (1.0f-[Utils convertToNormGain:20.0f*log10f(magnitude)])*eqView.frame.size.height;
-        
-        if (isnan(y)) {
-            y = 0.0f;
-            NSLog(@"WARNING: caught NaN in calculateBiquadMagnitudeResponseWithCoeffs");
-        }
-        
-        [points insertObject:[NSValue valueWithCGPoint:CGPointMake(x, y)] atIndex:i];
-    }
-    
-//    NSLog(@"Points array: %@", points);
-    
-    return points;
-    
-}
 
 #pragma mark -
 #pragma mark JVPeakingEQ delegate methods
-
+/* filterCoefficients method gets called every time new filter coefficients are calculated 
+ * within a JVPeakingEQ class of which this is the delegate.
+ *
+ * In this method, the received coefficients are used to calculate the magnitude response
+ * which is then plotted in an instance of the EQView UIView subclass.
+ */
 - (void) filterCoefficients:(float [5])coeffs {
-    //        NSLog(@"Coeffs:%f%f%f%f%f", coeffs[0], coeffs[1], coeffs[2], coeffs[3], coeffs[4]);
-    self.eqView.points = [self calculateBiquadMagnitudeResponseWithCoeffs:coeffs];
+    self.eqView.points = [dsp calculateBiquadMagnitudeResponseWithCoeffs:coeffs Locations:_frequencyLocations inRect:eqView.frame];
     [self.eqView setNeedsDisplay];
 }
 
@@ -190,7 +124,6 @@
         [alert show];
         
     } else {
-        NSLog(@"AudioAssetURL: %@", assetURL);
         [dsp setupFilterWithSoundFileURL:assetURL];
     }
     
@@ -215,16 +148,14 @@
     if (([soundFileButton isSelected]&&![micButton isSelected]) || (![soundFileButton isSelected]&&![micButton isSelected])) {
         [micButton setSelected:YES];
         [soundFileButton setSelected:NO];
-
+        
         [dsp.fileReader pause];
         [dsp.audioManager pause];
         [dsp setupFilterWithMicInput];
-        NSLog(@"micbutton");
     }
 }
 
 - (IBAction)SoundFileButtonTouchUpInside:(id)sender {
-    NSLog(@"soundfilebutton");
     [soundFileButton setSelected:YES];
     [micButton setSelected:NO];
     
@@ -238,59 +169,6 @@
     
 }
 
-
-- (IBAction)pinchGesture:(UIPinchGestureRecognizer *)sender {
-    CGFloat scale = [sender scale];
-    NSLog(@"Scale: %f", scale);
-    // local q and then assign
-    float qfactor = dsp.JVPEF.Q;
-    if (scale < 1.0f && scale > 0.0f && qfactor >= 0.0f) {
-        qfactor = qfactor-((1.0f-scale)/PARQ_Q_SCALINGFACTOR);
-    } else if (scale > 1.0f && qfactor <= PARQ_MAX_Q) {
-        qfactor = qfactor+((scale-1.0f)/PARQ_Q_SCALINGFACTOR);
-    }
-    if ([_qButton isSelected]) {
-        [self.qLabel setText:[NSString stringWithFormat:@"%.2f", [Utils convertToBandwidth:qfactor]]];
-    } else {
-        [self.qLabel setText:[NSString stringWithFormat:@"%.2f", qfactor]];
-    }
-    dsp.JVPEF.Q = qfactor;
-    
-    [self updateEQView];
-}
-
-- (IBAction)qButtonTouchUpInside:(id)sender {
-    [_qButton setSelected:![_qButton isSelected]];
-    if ([_qButton isSelected]) {
-        //        [_qButton setTitle:@"BW" forState:UIControlStateNormal];
-        [self.qLabel setText:[NSString stringWithFormat:@"%.2f", [Utils convertToBandwidth:dsp.JVPEF.Q]]];
-    } else {
-        [self.qLabel setText:[NSString stringWithFormat:@"%.2f", dsp.JVPEF.Q]];
-    }
-}
-
-
-
-- (IBAction)panGesture:(UIPanGestureRecognizer *)sender {
-    CGPoint point = [sender locationInView:eqView];
-    
-    // TBD add margin
-//    normPanX = (point.x/(eqView.bounds.size.width-2*PARQ_MARGIN_X));
-
-    normPanX = (point.x/eqView.bounds.size.width);
-    normPanY = (point.y/eqView.bounds.size.height);
-    //    NSLog(@"Point: %f\t%f\tProcessed:\t%f\t%f", point.x, point.y, normPanX, normPanY);
-    
-    [self updateCenterFrequency:normPanX];
-    
-    [self updateGain:normPanY];
-    
-    // Update EQView once
-    [self updateEQView];
-}
-
-
-
 - (void) updateCenterFrequency:(float)normF0{
     if (normF0 < 0.0f) {
         normF0 = 0.0f;
@@ -298,10 +176,11 @@
         normF0 = 1.0f;
     }
     
-//    float absoluteFreq =[Utils convertToLogScale:(normF0*(PARQ_MAX_F0-PARQ_MIN_F0)+PARQ_MIN_F0)];
     float absoluteFreq = [Utils convertToLogFrequency:normF0];
     
-    //    [self adjustFilterWithCenterFrequency:absoluteFreq dbGain:g Q:q];
+    // TBD Interpolate frequency value
+    //    [self animateFrom:[NSNumber numberWithFloat:dsp.JVPEF.centerFrequency] toNumber:[NSNumber numberWithFloat:absoluteFreq] withLabel:self.freqLabel];
+    
     dsp.JVPEF.centerFrequency = absoluteFreq;
     
     [self.freqLabel setText:[NSString stringWithFormat:@"%.0f Hz", absoluteFreq]];
@@ -316,13 +195,132 @@
     
     float dbGain = ((1-normGain)-fabs(PARQ_MIN_GAIN)/(fabs(PARQ_MIN_GAIN)+fabs(PARQ_MAX_GAIN)))*(fabs(PARQ_MAX_GAIN)+fabs(PARQ_MIN_GAIN));
     
-    //    [self adjustFilterWithCenterFrequency:f0 dbGain:dbGain Q:q];
     dsp.JVPEF.G = dbGain;
     
     [self.gainLabel setText:[NSString stringWithFormat:@"%.2f dB", dbGain]];
 }
 
-- (void) updateEQView {
-    [eqView setNeedsDisplay];
+#pragma mark Gesture Recognizer methods
+
+- (IBAction)qButtonTouchUpInside:(id)sender {
+    // Change button's selected attribute
+    [_qButton setSelected:![_qButton isSelected]];
+    // change value rendering
+    if ([_qButton isSelected]) {
+        [self.qLabel setText:[NSString stringWithFormat:@"%.2f", [Utils convertToBandwidth:dsp.JVPEF.Q]]];
+    } else {
+        [self.qLabel setText:[NSString stringWithFormat:@"%.2f", dsp.JVPEF.Q]];
+    }
 }
+
+
+- (IBAction)pinchGesture:(UIPinchGestureRecognizer *)sender {
+    CGFloat scale = [sender scale];
+
+    float qfactor = dsp.JVPEF.Q;
+    
+    if (sender.state == UIGestureRecognizerStateBegan) {
+        
+    }
+    
+    qfactor *= (1.0-scale)+1.0;
+    if (qfactor > PARQ_MAX_Q) {
+        qfactor = PARQ_MAX_Q;
+    }
+    
+    sender.scale = 1.0;
+    
+    if ([_qButton isSelected]) {
+        [self.qLabel setText:[NSString stringWithFormat:@"%.2f", [Utils convertToBandwidth:qfactor]]];
+    } else {
+        [self.qLabel setText:[NSString stringWithFormat:@"%.2f", qfactor]];
+    }
+    dsp.JVPEF.Q = qfactor;
+    
+}
+
+
+- (IBAction)panGesture:(UIPanGestureRecognizer *)sender {
+    CGPoint point = [sender locationInView:eqView];
+    
+    // TBD add margin: this is the first attempt
+//    //    normPanX = (FIGURE/(eqView.bounds.size.width-2*PARQ_MARGIN_X));
+//    if (point.x >= PARQ_MARGIN_X && point.x <= eqView.bounds.size.width-PARQ_MARGIN_X) {
+//        // in bounds
+//        normPanX = (point.x-PARQ_MARGIN_X)/(eqView.bounds.size.width-2*PARQ_MARGIN_X);
+//        [self updateCenterFrequency:normPanX];
+//    }
+//    
+//    if (point.y >= PARQ_MARGIN_Y && point.y <= eqView.bounds.size.height-PARQ_MARGIN_Y) {
+//        normPanY = (point.y-PARQ_MARGIN_Y)/(eqView.bounds.size.height-2*PARQ_MARGIN_Y);
+//        [self updateGain:normPanY];
+//    }
+//    NSLog(@"Point: %f\t%f\tProcessed:\t%f\t%f", point.x, point.y, normPanX, normPanY);
+
+    
+    normPanX = (point.x/eqView.bounds.size.width);
+    normPanY = (point.y/eqView.bounds.size.height);
+    
+    [self updateCenterFrequency:normPanX];
+    
+    [self updateGain:normPanY];
+    
+}
+
+
+# pragma mark -
+#pragma mark Interpolation methods
+// Method not used! Attempt to interpolate parameters
+// Not yet properly inplemented as of Sat 04 Oct 2014
+
+// thanks to https://stackoverflow.com/questions/7798785/uilabel-animating-number-change and https://github.com/MarkQSchultz/DisplayLinkExample/blob/master/DisplayLinkExample/ViewController.m
+
+- (void)animateFrom:(NSNumber *)fromVal toNumber:(NSNumber *)toVal withLabel:(UILabel *)label{
+    _interpolateFrom = fromVal;
+    _interpolateTo = toVal;
+    NSLog(@"From: %f to: %f", [_interpolateFrom floatValue], [_interpolateTo floatValue]);
+    
+    // perform interpolation only for values with a difference bigger than the set threshold
+    if (fabs([_interpolateTo floatValue]-[_interpolateFrom floatValue])>PARQ_INTERP_THRES_F0) {
+        NSLog(@"bigger than threshold: %f", fabs([_interpolateTo floatValue]-[_interpolateFrom floatValue]));
+        CADisplayLink *link = [CADisplayLink displayLinkWithTarget:self selector:@selector(animateNumber:)];
+        [link addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+    } else {
+    dsp.JVPEF.centerFrequency = [toVal floatValue];
+    }
+}
+
+- (void)animateNumber:(CADisplayLink *)sender {
+    NSTimeInterval timestamp = sender.timestamp;
+    
+    // Check if we've drawn yet
+    if (self.lastDrawTime == 0)
+    {
+        // If not, then set last draw time to the current timestamp of display link
+        self.lastDrawTime = timestamp;
+    }
+    
+    NSTimeInterval elapsedTimeSinceLastUpdate = timestamp - self.lastDrawTime;
+    self.remainingTime = MAX(self.remainingTime - elapsedTimeSinceLastUpdate, 0);
+    if (self.remainingTime > 0)
+    {
+        NSTimeInterval totalElapsedTime = self.duration - self.remainingTime;
+        CGFloat percentageComplete = totalElapsedTime / self.duration;
+        // do shit with percentage Value
+        
+        float interpVal = [_interpolateFrom floatValue] + ([_interpolateTo floatValue] - [_interpolateFrom floatValue]) * percentageComplete;
+        
+        NSLog(@"%f percent, value %f", percentageComplete, interpVal);
+        dsp.JVPEF.centerFrequency = interpVal;
+    }
+    else
+    {
+        self.remainingTime = self.duration;
+        [sender removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+        [sender invalidate];
+    }
+    
+    self.lastDrawTime = timestamp;
+}
+
 @end

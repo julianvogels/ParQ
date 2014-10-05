@@ -13,9 +13,9 @@
 +(float)convertToNormF0:(float)frequency;
 +(float)convertToNormGain:(float)gain;
 +(float)convertToBandwidth:(float)q;
-+(float)convertToLogScale:(float)frequency;
 +(BOOL)coreAudioCanOpenURL:(NSURL*)url;
 +(float)convertToLogFrequency:(float)normVal;
++(float)intepolateValueFrom:(float)valt0 to:(float)valt1 withTimeInstant:(float)t;
 
 
 
